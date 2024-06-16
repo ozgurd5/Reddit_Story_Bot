@@ -1,0 +1,1 @@
+A bot that fetches random posts from specified subreddits, uses text-to-speech, overlays text, and incorporates gameplay footage from Minecraft, Subway Surfers, or Temple Run to create a short video for platforms like TikTok or Instagram Reels
