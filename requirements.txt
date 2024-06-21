@@ -1,3 +1,5 @@
 python-dotenv~=1.0.1
 praw~=7.7.1
 moviepy~=1.0.3
+gTTS~=2.5.1
+mutagen~=1.47.0
