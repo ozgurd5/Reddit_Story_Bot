@@ -17,6 +17,20 @@ reddit_settings = {
     # Selects a random subreddit from the subreddits.txt, then selects a random post from the top 50 posts of the subreddit in all time.
 }
 
+text_to_speech_settings = {
+    # Paths
+    "output_sound_file_path": "output_sound.mp3",  # Path to the file that the text-to-speech program will save the sound file
+
+    # Parameters
+    "is_tiktok": False,  # If True, uses TikTok text-to-speech, if False, uses Google text-to-speech
+
+    # Google Parameters
+    "google_language": "en",  # todo: list available languages
+
+    # Tiktok Parameters
+    "tiktok_voice": "en_us_001",  # todo: list available voices
+}
+
 program_settings = {
     "has_debug": True,  # If True, prints debug messages
 }

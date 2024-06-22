@@ -1,23 +1,26 @@
 ﻿from utilities import debug_print
+import program_settings
 from reddit import get_random_text_from_reddit
+import text_to_speech as tts
+
 import moviepy.editor as moviepy
-from gtts import gTTS
 from mutagen.mp3 import MP3
 
 
 def main():
     text = get_random_text_from_reddit()
-    debug_print(text)
-    google_text_to_speech(text)
-    audio = MP3("output_sound.mp3")
+    debug_print("Selected Text:\n" + text)
+
+    debug_print("Creating text to speech with TikTok, this may take a while, please wait..." if program_settings.text_to_speech_settings["is_tiktok"]
+                else "Creating text to speech with Google, this may take a while, please wait...")
+    tts.create_text_to_speech(text)
+
+    audio = MP3(program_settings.text_to_speech_settings["output_sound_file_path"])
     duration = audio.info.length
 
-    example_video(duration)
+    debug_print(f"Text to speech file created with the duration of {duration} seconds")
 
-
-def google_text_to_speech(text):
-    tts = gTTS(text=text, lang='en')
-    tts.save("output_sound.mp3")
+    #example_video(duration)
 
 
 def example_video(duration):
