@@ -3,11 +3,9 @@ from program_settings import reddit_settings
 from dotenv import dotenv_values
 import praw
 import random
-from datetime import datetime
 
 
 def get_random_text_from_reddit():
-    init_random_seed()
     reddit = init_reddit()
 
     subreddits_to_check = get_subreddits()
@@ -77,13 +75,6 @@ def init_reddit():
     )
 
     return reddit
-
-
-def init_random_seed():
-    now = datetime.now()
-    seed = int(f"{now.year}{now.month:02d}{now.day:02d}{now.hour:02d}{now.minute:02d}{now.second:02d}{now.microsecond:06}")
-    debug_print("setting seed: ", seed)
-    random.seed(seed)
 
 
 def get_subreddits():

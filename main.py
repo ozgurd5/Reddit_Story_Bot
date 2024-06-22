@@ -1,4 +1,4 @@
-﻿from utilities import debug_print
+﻿from utilities import debug_print, init_random_seed
 import program_settings
 from reddit import get_random_text_from_reddit
 import text_to_speech as tts
@@ -8,6 +8,8 @@ from mutagen.mp3 import MP3
 
 
 def main():
+    init_random_seed()
+
     text = get_random_text_from_reddit()
     debug_print("Selected Text:\n" + text)
 

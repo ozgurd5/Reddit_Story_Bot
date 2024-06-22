@@ -17,7 +17,15 @@ def create_text_to_speech(text):
 
 
 def google_text_to_speech(text):
-    tts = gTTS(text=text, lang='en')
+    if text_to_speech_settings["has_random_voice"]:
+        import random
+        google_voice = random.choice(text_to_speech_settings["random_google_voice_pool"])
+    else:
+        google_voice = text_to_speech_settings["google_voice"]
+
+    debug_print(f"Selected Google Voice: {google_voice}")
+
+    tts = gTTS(text=text, lang='en', tld=google_voice)
     tts.save("output_sound.mp3")
 
 
@@ -34,7 +42,14 @@ def tiktok_text_to_speech(text):
     tiktok_api_base_url = env.get("TIKTOK_API_BASE_URL")
     tiktok_user_agent = env.get("TIKTOK_USER_AGENT")
     tiktok_session_id = env.get("TIKTOK_SESSION_ID")
-    tiktok_voice = text_to_speech_settings["tiktok_voice"]
+
+    if text_to_speech_settings["has_random_voice"]:
+        import random
+        tiktok_voice = random.choice(text_to_speech_settings["random_tiktok_voice_pool"])
+    else:
+        tiktok_voice = text_to_speech_settings["tiktok_voice"]
+
+    debug_print(f"Selected TikTok Voice: {tiktok_voice}")
 
     textlist = textwrap.wrap(text, width=200, break_long_words=True, break_on_hyphens=False)  # TikTok has a limit of 200 characters per request
 
