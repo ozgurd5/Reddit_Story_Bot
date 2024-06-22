@@ -25,7 +25,8 @@ reddit_settings = {
 
 youtube_downloader_settings = {
     # Paths
-    "youtube_download_path": os.getcwd() + "/youtube_downloads/"  # Path to the file that the youtube downloader program will save the video file
+    "youtube_video_list_path": "youtube_videos_to_download.txt",  # Path to the file that contains the YouTube video URLs, each line should be a video URL
+    "youtube_download_path": os.getcwd() + "/youtube_downloads/"  # Path to the file that the YouTube downloader program will save the video file
 }
 
 text_to_speech_settings = {
