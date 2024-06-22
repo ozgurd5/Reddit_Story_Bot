@@ -1,4 +1,6 @@
-﻿# Do not change the keys (left side of the colon), only change the values (right side of the colon)
+﻿import os
+
+# Do not change the keys (left side of the colon), only change the values (right side of the colon)
 
 program_settings = {
     "has_debug": True,  # If True, prints debug messages
@@ -19,6 +21,11 @@ reddit_settings = {
     # "post_limit": 50,
     # "time_filter": "all",
     # Selects a random subreddit from the subreddits.txt, then selects a random post from the top 50 posts of the subreddit in all time.
+}
+
+youtube_downloader_settings = {
+    # Paths
+    "youtube_download_path": os.getcwd() + "/youtube_downloads/"  # Path to the file that the youtube downloader program will save the video file
 }
 
 text_to_speech_settings = {
