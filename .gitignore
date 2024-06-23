@@ -1,4 +1,6 @@
-﻿# Byte-compiled / optimized / DLL files
+﻿gameplay_footage/
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
