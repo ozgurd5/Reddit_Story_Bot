@@ -4,6 +4,7 @@
 
 program_settings = {
     "has_debug": True,  # If True, prints debug messages
+    "gameplay_footage_path": "gameplay_footage",  # Path to the folder that contains the gameplay footage
 }
 
 reddit_settings = {
