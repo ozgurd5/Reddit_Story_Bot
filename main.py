@@ -4,6 +4,7 @@ from reddit import get_random_text_from_reddit
 import text_to_speech as tts
 import os
 from mutagen.mp3 import MP3
+import moviepy.editor
 import random
 
 
@@ -25,26 +26,35 @@ def main():
     create_video(text, tts_duration)
 
 
-def select_random_video():
-    gameplay_footage_path = program_settings.program_settings["gameplay_footage_path"]
+def select_random_video(folder_path=None):
+    if not folder_path:
+        gameplay_footage_path = program_settings.program_settings["gameplay_footage_path"]
 
-    # Find game folders
-    all_game_folders = os.listdir(gameplay_footage_path)
-    game_folders = []
-    for game_folder in all_game_folders:
-        if os.path.isdir(os.path.join(gameplay_footage_path, game_folder)):
-            game_folders.append(game_folder)
+        # Find game folders
+        all_game_folders = os.listdir(gameplay_footage_path)
+        game_folders = []
+        for game_folder in all_game_folders:
+            if os.path.isdir(os.path.join(gameplay_footage_path, game_folder)):
+                game_folders.append(game_folder)
 
-    if not game_folders:
-        raise ValueError("No game folders found")
+        if not game_folders:
+            raise ValueError("No game folders found")
 
-    debug_print(f"Found {len(game_folders)} game folders")
+        debug_print(f"Found {len(game_folders)} game folders")
 
-    # Select a random game folder
-    random_folder = random.choice(game_folders)
-    random_folder_path = os.path.join(gameplay_footage_path, random_folder)
+        # Select a random game folder
+        random_folder = random.choice(game_folders)
+        random_folder_path = os.path.join(gameplay_footage_path, random_folder)
 
-    debug_print(f"Selected game: {random_folder}")
+        debug_print(f"Selected game: {random_folder}")
+
+    else:
+        if not os.path.isdir(folder_path):
+            raise ValueError(f"The given folder path {folder_path} is not a valid folder path.")
+
+        random_folder_path = folder_path
+        random_folder = os.path.basename(random_folder_path)
+        debug_print(f"Folder path is given, selected game is {random_folder}.")
 
     # Find videos in the selected game folder
     all_videos = os.listdir(random_folder_path)
@@ -61,14 +71,78 @@ def select_random_video():
     random_video_path = os.path.join(random_folder_path, random_video)
     debug_print(f"Selected random video: {random_video}")
 
-    return random_video_path
+    return random_video_path, random_folder_path
 
 
 def create_video(text, tts_duration):
-    video_path = select_random_video()
+    video_path, folder_path = select_random_video()
+    video = moviepy.editor.VideoFileClip(video_path)
+
+    videos = [video]
+    video_durations = [video.duration]
+    total_video_duration = video.duration
+
+    # We will merge videos until the duration of the text-to-speech is shorter than the duration of the all videos
+    while tts_duration > total_video_duration:
+        debug_print("Selected video duration is shorter than the text-to-speech duration, selecting another video.")
+        video_path, unimportant = select_random_video(folder_path)
+        video = moviepy.editor.VideoFileClip(video_path)
+
+        videos.append(video)
+        video_durations.append(video.duration)
+
+        total_video_duration += video.duration
+
+    debug_print(f"Selected {len(videos)} videos which have a total duration of {total_video_duration} seconds")
+
+    # Select random start time
+    start_time = random.uniform(0, total_video_duration - tts_duration)
+    end_time = start_time + tts_duration
+
+    debug_print(f"Selected start time: {start_time}, end time: {end_time}")
+
+    # Find the first video according to start_time, it doesn't have to be the first video in the list
+    current_time = 0
+    first_video_index = 0
+    for i, duration in enumerate(video_durations):
+        if current_time + duration > start_time:
+            first_video_index = i
+            break
+        current_time += duration
+
+    first_video = videos[first_video_index]
+    last_video = videos[-1]
+
+    debug_print(f"First video is: {first_video.filename}, last video is: {last_video.filename}")
+
+    # Find the start time in the first video
+    start_time_in_first_video = start_time - current_time  # Current time is the length of the videos before the first video at this point
+    debug_print(f"Start time in the first video: {start_time_in_first_video}")
+
+    # Find the end time in the last video, last video has to be the last video in the list
+    current_time = 0
+    end_time_in_last_video = 0
+    for i, duration in enumerate(video_durations):
+        if current_time + duration > end_time:
+            end_time_in_last_video = end_time - current_time  # Current time is the length of the videos before the first video at this point
+            break
+        current_time += duration
+
+    debug_print(f"End time in the last video: {end_time_in_last_video}")
+
+    first_video = first_video.subclip(start_time_in_first_video, first_video.duration)
+    last_video = last_video.subclip(0, end_time_in_last_video)
+
+    videos = videos[first_video_index + 1:]
+    videos = videos[:-1]
+
+    # for i, video in enumerate(videos):
+    #     videos[i] = video.subclip(0, video.duration)
+
+    final_video = moviepy.editor.concatenate_videoclips([first_video] + videos + [last_video])
 
 
 # Call the main function
 # main()
 
-create_video("", 0)
+create_video("", 1200)
