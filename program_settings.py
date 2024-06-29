@@ -9,6 +9,11 @@ program_settings = {
     "max_while_loop_count_for_video_selection": 25,  # Maximum number of while loop iterations for video selection
 }
 
+video_creation_settings = {
+    # Paths
+    "output_video_path": "output_video.mp4",  # Path to the file that the video creation program will save the video file
+}
+
 reddit_settings = {
     # Paths
     "subreddits_file_path": "subreddits.txt",  # Path to the file that contains the subreddits, each line should be a subreddit name, e.g. "AskReddit"
@@ -37,8 +42,8 @@ text_to_speech_settings = {
     "output_sound_file_path": "output_sound.mp3",  # Path to the file that the text-to-speech program will save the sound file
 
     # Parameters
-    "is_tiktok": False,  # If True, uses TikTok text-to-speech, if False, uses Google text-to-speech
-    "has_random_voice": True,  # If True, selects a random voice from the random_tiktok_voice_pool
+    "is_tiktok": True,  # If True, uses TikTok text-to-speech, if False, uses Google text-to-speech
+    "has_random_voice": False,  # If True, selects a random voice from the random_tiktok_voice_pool
 
     # Google Parameters
     "google_voice": "com",  # com for American English, co.uk for British English, com.au for Australian English, co.in for Indian English

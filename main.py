@@ -150,16 +150,29 @@ def create_video(text, tts_duration):
 
     debug_print(f"End time in the last video: {end_time_in_last_video}")
 
+    # Trim the first and last videos
     first_video = first_video.subclip(start_time_in_first_video, first_video.duration)
     last_video = last_video.subclip(0, end_time_in_last_video)
 
+    # Trim the videos between the first and last videos
     videos = videos[first_video_index + 1:]
     videos = videos[:-1]
 
-    # for i, video in enumerate(videos):
-    #     videos[i] = video.subclip(0, video.duration)
+    for i, video in enumerate(videos):
+        videos[i] = video.subclip(0, video.duration)
 
+    # Concatenate the videos
     final_video = moviepy.editor.concatenate_videoclips([first_video] + videos + [last_video])
+    debug_print(f"Final video duration: {final_video.duration} seconds")
+
+    # Add sound to the final video
+    audio = moviepy.editor.AudioFileClip(program_settings.text_to_speech_settings["output_sound_file_path"])
+    final_video = final_video.set_audio(audio)
+
+    if os.path.exists(program_settings.program_settings["output_video_path"]):
+        os.remove(program_settings.program_settings["output_video_path"])
+
+    final_video.write_videofile(program_settings.program_settings["output_video_path"])
 
 
 def has_video_in_videos(video, videos):
@@ -170,6 +183,4 @@ def has_video_in_videos(video, videos):
 
 
 # Call the main function
-# main()
-
-create_video("", 1200)
+main()
