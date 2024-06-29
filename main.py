@@ -82,11 +82,31 @@ def create_video(text, tts_duration):
     video_durations = [video.duration]
     total_video_duration = video.duration
 
+    while_loop_counter = 0
+
     # We will merge videos until the duration of the text-to-speech is shorter than the duration of the all videos
     while tts_duration > total_video_duration:
-        debug_print("Selected video duration is shorter than the text-to-speech duration, selecting another video.")
-        video_path, unimportant = select_random_video(folder_path)
+        debug_print("Duration of the selected videos are shorter than the text-to-speech duration, selecting and adding another video.")
+        while_loop_counter += 1
+        if while_loop_counter > program_settings.program_settings["max_while_loop_count_for_video_selection"]:
+            raise ValueError("Maximum while loop count reached, could not find a video to cover the text-to-speech duration. "
+                             "Add more videos or allow same video selection.")
+
+        video_path, _ = select_random_video(folder_path)
         video = moviepy.editor.VideoFileClip(video_path)
+
+        same_video_while_loop_counter = 0
+        # If selected video is selected again, select another video
+        if not program_settings.program_settings["allow_same_video_selection"]:
+            while has_video_in_videos(video, videos):
+                same_video_while_loop_counter += 1
+                if same_video_while_loop_counter > program_settings.program_settings["max_while_loop_count_for_video_selection"]:
+                    raise ValueError("Maximum while loop count reached, could not find a video to cover the text-to-speech duration. "
+                                     "Add more videos or allow same video selection.")
+
+                debug_print("Selected video is selected again, selecting another video.")
+                video_path, _ = select_random_video(folder_path)
+                video = moviepy.editor.VideoFileClip(video_path)
 
         videos.append(video)
         video_durations.append(video.duration)
@@ -140,6 +160,13 @@ def create_video(text, tts_duration):
     #     videos[i] = video.subclip(0, video.duration)
 
     final_video = moviepy.editor.concatenate_videoclips([first_video] + videos + [last_video])
+
+
+def has_video_in_videos(video, videos):
+    for v in videos:
+        if v.filename == video.filename:
+            return True
+    return False
 
 
 # Call the main function

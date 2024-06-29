@@ -5,6 +5,8 @@
 program_settings = {
     "has_debug": True,  # If True, prints debug messages
     "gameplay_footage_path": "gameplay_footage",  # Path to the folder that contains the gameplay footage
+    "allow_same_video_selection": False,  # If True, allows the same video to be selected again if the selected video is not enough to cover the tts duration
+    "max_while_loop_count_for_video_selection": 25,  # Maximum number of while loop iterations for video selection
 }
 
 reddit_settings = {
