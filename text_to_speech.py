@@ -6,6 +6,8 @@ import base64
 
 from dotenv import dotenv_values
 from program_settings import text_to_speech_settings
+from program_settings import random_google_voice_pool
+from program_settings import random_tiktok_voice_pool
 from utilities import debug_print
 
 
@@ -19,7 +21,7 @@ def create_text_to_speech(text):
 def google_text_to_speech(text):
     if text_to_speech_settings["has_random_voice"]:
         import random
-        google_voice = random.choice(text_to_speech_settings["random_google_voice_pool"])
+        google_voice = random.choice(list(random_google_voice_pool))
     else:
         google_voice = text_to_speech_settings["google_voice"]
 
@@ -45,7 +47,7 @@ def tiktok_text_to_speech(text):
 
     if text_to_speech_settings["has_random_voice"]:
         import random
-        tiktok_voice = random.choice(text_to_speech_settings["random_tiktok_voice_pool"])
+        tiktok_voice = random.choice(list(random_tiktok_voice_pool))
     else:
         tiktok_voice = text_to_speech_settings["tiktok_voice"]
 

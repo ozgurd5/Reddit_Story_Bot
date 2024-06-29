@@ -169,10 +169,10 @@ def create_video(text, tts_duration):
     audio = moviepy.editor.AudioFileClip(program_settings.text_to_speech_settings["output_sound_file_path"])
     final_video = final_video.set_audio(audio)
 
-    if os.path.exists(program_settings.program_settings["output_video_path"]):
-        os.remove(program_settings.program_settings["output_video_path"])
+    if os.path.exists(program_settings.video_creation_settings["output_video_path"]):
+        os.remove(program_settings.video_creation_settings["output_video_path"])
 
-    final_video.write_videofile(program_settings.program_settings["output_video_path"])
+    final_video.write_videofile(program_settings.video_creation_settings["output_video_path"])
 
 
 def has_video_in_videos(video, videos):

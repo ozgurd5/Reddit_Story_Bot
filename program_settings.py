@@ -43,7 +43,7 @@ text_to_speech_settings = {
 
     # Parameters
     "is_tiktok": True,  # If True, uses TikTok text-to-speech, if False, uses Google text-to-speech
-    "has_random_voice": False,  # If True, selects a random voice from the random_tiktok_voice_pool
+    "has_random_voice": True,  # If True, selects a random voice from the random_tiktok_voice_pool
 
     # Google Parameters
     "google_voice": "com",  # com for American English, co.uk for British English, com.au for Australian English, co.in for Indian English
